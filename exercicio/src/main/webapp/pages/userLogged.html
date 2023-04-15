@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+	<head>
+    	<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+    	<title>My Page</title>
+    </head>
+
+	<style>
+		.container{
+			justify-content: center;
+    		align-items: center;
+  			text-align:center;
+  		}
+	
+		.info{
+  			background-color:rgb(34,34,34);
+ 	 		width: 300px;
+  			padding: 5px;
+  			margin: 15px;
+		}
+	
+		.bottomRight{
+  			display:block;
+  			position:absolute;
+  			bottom:0;
+  			right:0;
+  		}
+  		
+  		.bottomLeft{
+  			display:block;
+  			position:absolute;
+  			bottom:0;
+  			left: 0;
+  		}
+  		
+  		.button {
+  			width:450px;
+  			border: none;
+  			color: white;
+  			padding: 10px;
+  			text-align: center;
+  			text-decoration: none;
+  			display: inline-block;
+  			font-size: 16px;
+  			margin: 4px 2px;
+  			transition-duration: 0.4s;
+  			cursor: pointer;
+		}
+
+		.button1 {
+			background-color: rgb(210,212,211); 
+		 	color: black; 
+		  	border: 2px solid #4CAF50;
+		}
+		
+		.button1:hover {
+		  	background-color: #4CAF50;
+		  	color: rgb(237,233,232);
+		}
+  		
+  		.button2 {
+  			background-color: rgb(210,212,211); 
+ 	 		color: black; 
+ 			border: 2px solid #008CBA;
+		}
+
+		.button2:hover {
+  			background-color: #008CBA;
+  			color: rgb(237,233,232);
+		}
+		
+		.userProfile {
+    		width: 100px;
+    		height: 100px;
+    		object-fit: cover;
+    		object-position: center;
+    		border-radius: 20%;
+		}
+		
+		.topleft {
+  			position: absolute;
+  			top: 0;
+  			left: 0;
+  			color: rgb(237,233,232); 
+		}		
+	</style>
+
+	<body style="background-color:rgb(34,34,34);" onload="loadLoggedUser()">
+		<div class="topleft">
+    		<img src="../img/user.png" alt="Profile Picture" class="userProfile">
+    	</div>	
+		<div class="bottomLeft">
+			<div id="aux" class="info">
+			 	<p style="color:rgb(237,233,232);" id="user"></p>
+			 	<p style="color:rgb(237,233,232);" id="name"></p>
+			 	<p style="color:rgb(237,233,232);" id= "profile"></p>
+			</div>
+		</div>
+		<div class="container">
+			<br><br><br><br><br>
+			<h2 style="color:rgb(237,233,232);">Welcome to your page.</h2>
+			<h2 style="color:rgb(237,233,232);">Where you can choose what you want to do in the application.</h2>
+			<br><br><br>
+			<button class="button button2" onclick="window.location.href = '/pages/modifyAttributes.html'">Change Attributes</button>
+			<br>
+			<button class="button button1" onclick="window.location.href = '/pages/modifyPass.html'">Change Password</button>
+			<br>
+			<button class="button button2" onclick="window.location.href = '/pages/modifyProfilePic.html'">Change Profile Image</button>
+			<br>
+			<button class="button button1" onclick="window.location.href = '/pages/showToken.html'">Show Log Info</button>
+			<br>
+			<button class="button button2" onclick="window.location.href = '/pages/showUserInfo.html'">Show User Info</button>
+			<br>
+			<button class="button button1" onclick="window.location.href = '/pages/remove.html'">RemoveUser</button>
+			<br>
+			<button id="listHide" style="display:none" class="button button2" onclick="window.location.href = '/pages/list.html'">List Users</button>
+			<br>
+			<button id="active" style="display:none" class="button button1" onclick="window.location.href = '/pages/loggedNow.html'">Active Users</button>
+			<br>
+			<button class="button button2" onclick="window.location.href = '/pages/logout.html'">Log Out</button>
+		</div>
+		<div class="bottomRight">
+			<p style="color:rgb(237,233,232);">@GoncaloCerveira2023&emsp;&emsp;</p>
+		</div>
+		<script>
+		function loadLoggedUser() {
+			var xmlhttp = new XMLHttpRequest();
+
+			var user = localStorage.getItem("userLogged");
+			
+			var postLogged = {
+				"username": user
+			}
+			
+			var json = JSON.stringify(postLogged);
+			
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4) {
+					if (xmlhttp.status == 200) {
+						var userLogged = JSON.parse(this.responseText);
+
+						document.getElementById("user").innerHTML = userLogged.username;
+						document.getElementById("name").innerHTML = userLogged.name;
+						document.getElementById("profile").innerHTML = userLogged.profile;
+						
+						downloadProfilePic();
+						
+						var color = userLogged.role;
+						
+						if(color == "SU") {
+							document.getElementById("aux").style.border = "2px solid red";
+							document.getElementById("active").style.display = "initial";
+							document.getElementById("listHide").style.display = "initial";
+						} 
+						else if(color == "GS") {
+							document.getElementById("aux").style.border = "2px solid orange";
+							document.getElementById("active").style.display = "none";
+							document.getElementById("listHide").style.display = "initial";
+						}
+						else if(color == "GA") {
+							document.getElementById("aux").style.border = "2px solid pink";
+							document.getElementById("active").style.display = "none";
+							document.getElementById("listHide").style.display = "none";
+						}  
+						else if(color == "GBO") {
+							document.getElementById("aux").style.border = "2px solid yellow";
+							document.getElementById("active").style.display = "none";
+							document.getElementById("listHide").style.display = "initial";
+						}
+						else {
+							document.getElementById("aux").style.border = "2px solid green";
+							document.getElementById("active").style.display = "none";
+							document.getElementById("listHide").style.display = "initial";
+						}
+					}
+				}
+			}
+
+			xmlhttp.open("POST", document.location.origin + "/rest/infoUser/v1", true);
+			xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			xmlhttp.send(json);
+		}
+		
+		function downloadProfilePic() {
+		    document.getElementsByClassName("userProfile")[0].src = "https://storage.googleapis.com/individualproject-382911.appspot.com/" + document.getElementById("user").textContent;
+		}
+		
+		function goToLogin(){
+		    if(localStorage.getItem("userLogged") === ""){
+		        window.location.href = "/login.html";
+		    }
+		}
+
+		window.addEventListener('load', goToLogin);
+		</script>
+	</body>
+</html>
