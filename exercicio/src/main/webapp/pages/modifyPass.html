@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+    	<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+    	<title>Modify Password</title>
+	</head>
+	<style>
+		.container{
+			justify-content: center;
+    		align-items: center;
+  			text-align:center;
+  		}
+	
+		.info{
+  			background-color:rgb(34,34,34);
+ 	 		width: 300px;
+  			padding: 5px;
+  			margin: 15px;
+		}
+	
+		.bottomRight{
+  			display:block;
+  			position:absolute;
+  			bottom:0;
+  			right:0;
+  		}
+  		
+  		.bottomLeft{
+  			display:block;
+  			position:absolute;
+  			bottom:0;
+  			left: 0;
+  		}
+  		
+  		.button {
+  			border: none;
+  			color: white;
+  			padding: 8px 20px;
+  			text-align: center;
+  			text-decoration: none;
+  			display: inline-block;
+  			font-size: 16px;
+  			margin: 4px 2px;
+  			transition-duration: 0.4s;
+  			cursor: pointer;
+		}
+
+		.button1 {
+			background-color: rgb(210,212,211); 
+		 	color: black; 
+		  	border: 2px solid #4CAF50;
+		}
+		
+		.button1:hover {
+		  	background-color: #4CAF50;
+		  	color: rgb(237,233,232);
+		}
+  		
+  		.button2 {
+  			background-color: rgb(210,212,211); 
+ 	 		color: black; 
+ 			border: 2px solid #008CBA;
+		}
+
+		.button2:hover {
+  			background-color: #008CBA;
+  			color: rgb(237,233,232);
+		}
+	</style>
+	<body style="background-color:rgb(34,34,34);" onload="loadLoggedUser()">
+		<div class="bottomLeft">
+			<div id="aux" class="info">
+			 	<p style="color:rgb(237,233,232);" id="user"></p>
+			 	<p style="color:rgb(237,233,232);" id="name"></p>
+			 	<p style="color:rgb(237,233,232);" id= "profile"></p>
+			</div>
+		</div>
+		<div class="container">
+			<br><br><br><br><br>
+			<h2 style="color:rgb(237,233,232);">Change your old password to a new one:</h2>
+			<br><br>
+			<label style="color:rgb(237,233,232);" for="oldPass"></label>
+				<input type="password" name="oldPass" id="oldPass" placeholder="Old Password" required>
+			<br><br>
+				<label style="color:rgb(237,233,232);" for="newPass"></label>
+					<input type="password" name="newPass" id="newPass" placeholder="New Password" required>	
+			<br><br>
+				<label style="color:rgb(237,233,232);" for="confirmation"></label>
+					<input type="password" name="confirmation" id="confirmation" placeholder="Confirm New Password" required>
+			<br><br>
+			<button class="button button1" onclick="modifyPass()">Change</button>
+			<button class="button button2" onclick="window.location.href = '/pages/userLogged.html'">Go Back</button>
+		</div>
+		<div class="bottomRight">
+			<p style="color:rgb(237,233,232);">@GoncaloCerveira2023&emsp;&emsp;</p>
+		</div>
+	
+		<script>
+		function modifyPass(){
+			var xmlhttp = new XMLHttpRequest();
+			
+			var user = document.getElementById("user").innerHTML;
+			var oldPass = document.getElementById("oldPass").value;
+			var newPass = document.getElementById("newPass").value;
+			var confirmation = document.getElementById("confirmation").value;
+		
+	        var postModifyPass = {
+	        	"username": user,
+	    		"password": oldPass,
+	    		"newPass": newPass,
+	    		"newConfirmation": confirmation
+	        }
+	        
+	        var json = JSON.stringify(postModifyPass);
+	   		
+	    	xmlhttp.onreadystatechange = function() {
+	   			if(xmlhttp.readyState == 4) {
+	   				if(xmlhttp.status == 200){
+	   					alert(xmlhttp.responseText);
+	   					window.location.href = "/pages/userLogged.html";
+	   				} 
+	   				else{
+	   					alert(xmlhttp.responseText);
+	   				}
+	   			}
+	   		}
+	    	
+	    	xmlhttp.open("POST", document.location.origin + "/rest/modifyPass/v1", true);
+	    	xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	    	xmlhttp.send(json);
+		}
+
+		function loadLoggedUser() {
+			var xmlhttp = new XMLHttpRequest();
+
+			var user = localStorage.getItem("userLogged");
+
+			var postLogged = {
+				"username": user
+			}
+			
+			var json = JSON.stringify(postLogged);
+			
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4) {
+					if (xmlhttp.status == 200) {
+						var userLogged = JSON.parse(this.responseText);
+
+						document.getElementById("user").innerHTML = userLogged.username;
+						document.getElementById("name").innerHTML = userLogged.name;
+						document.getElementById("profile").innerHTML = userLogged.profile;
+						
+						var color = userLogged.role;
+						
+						if(color == "SU") {
+							document.getElementById("aux").style.border = "2px solid red";
+						} 
+						else if(color == "GS") {
+							document.getElementById("aux").style.border = "2px solid orange";
+						}
+						else if(color == "GA") {
+							document.getElementById("aux").style.border = "2px solid pink";
+						}  
+						else if(color == "GBO") {
+							document.getElementById("aux").style.border = "2px solid yellow";
+						}
+						else {
+							document.getElementById("aux").style.border = "2px solid green";
+						}
+					}
+				}
+			}
+
+			xmlhttp.open("POST", document.location.origin + "/rest/infoUser/v1", true);
+			xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			xmlhttp.send(json);
+		}
+		</script>
+	</body>
+</html>
