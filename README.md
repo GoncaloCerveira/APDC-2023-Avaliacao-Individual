@@ -5,7 +5,7 @@ Lecionado na faculdade NOVA School of Science and Technology
 
 # Link do video:
 
-https://drive.google.com/file/d/1j4cUNEr_jcNU2NX71AjvTIBN6LLRFvoC/view?usp=share_link
+https://drive.google.com/file/d/1TE97leMje6glIdCYbo2Rt0XTBSbnaJIV/view?usp=share_link
 
 # Criado por:
 
