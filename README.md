@@ -3,6 +3,10 @@ Repositório criado para desenvolvimento da avaliação individual da cadeira At
 
 Lecionado na faculdade NOVA School of Science and Technology
 
+# Link do video:
+
+https://drive.google.com/file/d/1n_HR1521CuQ2Go-0nm6wxgMC9HTUeuis/view?usp=share_link
+
 # Criado por:
 
 Nome: Gonçalo Cerveira 
